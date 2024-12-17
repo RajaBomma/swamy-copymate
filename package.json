@@ -1,8 +1,10 @@
 {
   "name": "copy-mate",
-  "displayName": "copy mate",
-  "description": "copy code from multiple file by on click which file locations",
-  "version": "0.0.1",
+  "displayName": "Copy Mate",
+  "description": "Copy code from multiple files with file locations by a single click.",
+  "version": "0.0.2",
+  "publisher": "SwamyPenupothula",
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -11,11 +13,16 @@
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/swamy3697/copy-mate.git"
+  },
+  "license": "MIT",
   "contributes": {
     "commands": [
       {
         "command": "copy-mate",
-        "title": "copy mate"
+        "title": "Copy Mate"
       }
     ]
   },
