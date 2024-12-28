@@ -67,7 +67,8 @@ function createTreeStructure(files: string[], rootPath: string): string {
             
             result += prefix + connector + key + '\n';
             
-            if (Object.keys(value).length > 0) {
+            // Assert that value is an object
+            if (Object.keys(value as object).length > 0) {
                 result += renderTree(value, prefix + childPrefix, isLastEntry);
             }
         });
