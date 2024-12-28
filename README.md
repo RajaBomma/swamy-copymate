@@ -47,9 +47,6 @@ Copy Mate simplifies sharing code with AI chatbots, team members, or for debuggi
    - Click "Copy Content" for file content with paths
    - Click "Copy Structure" for a tree visualization
 
-<div align="center">
-  <img src="assets/usage.png" alt="Copy Mate Usage" width="600"/>
-</div>
 
 ## 📝 Example Output
 
