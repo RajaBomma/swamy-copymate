@@ -3,8 +3,8 @@
 <div align="center">
   <img src="https://github.com/swamy3697/iPhone-Calculator/blob/main/copy-mate-icon.png" alt="Copy Mate Banner" width="600"/>
   
-[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/swamy.copy-mate.svg)](https://marketplace.visualstudio.com/items?itemName=SwamyPenupothula.copy-mate)
-[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/swamy.copy-mate.svg)](https://marketplace.visualstudio.com/items?itemName=SwamyPenupothula.copy-mate)
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/SwamyPenupothula.copy-mate.svg)](https://marketplace.visualstudio.com/items?itemName=SwamyPenupothula.copy-mate)
+[![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/SwamyPenupothula.copy-mate.svg)](https://marketplace.visualstudio.com/items?itemName=SwamyPenupothula.copy-mate)
 [![GitHub](https://img.shields.io/github/license/swamy3697/copy-mate)](https://github.com/swamy3697/copy-mate/blob/main/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/swamy3697/copy-mate)](https://github.com/swamy3697/copy-mate/issues)
 </div>
@@ -14,7 +14,9 @@ Copy Mate simplifies sharing code with AI chatbots, team members, or for debuggi
 ## 🎯 Quick Demo
 
 <div align="center">
-  <img src="assets/demo.gif" alt="Copy Mate Demo" width="600"/>
+  <img src="https://github.com/swamy3697/iPhone-Calculator/blob/main/command%20pallete.png" alt="Copy Mate start" width="600"/>
+
+  <img src="https://github.com/swamy3697/iPhone-Calculator/blob/main/copy-mate-home.png" alt="Copy Mate home" width="600"/>
 </div>
 
 ## ✨ Features
