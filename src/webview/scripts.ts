@@ -3,6 +3,22 @@ export function getScripts(): string {
     return `
         const vscode = acquireVsCodeApi();
         
+        // Handle messages from the extension
+        window.addEventListener('message', event => {
+            const message = event.data;
+            switch (message.type) {
+                case 'fileTree':
+                    // Update the file tree content
+                    document.querySelector('.file-tree').innerHTML = message.content;
+                    // Hide loading spinner and show main content
+                    document.getElementById('loadingContainer').style.display = 'none';
+                    document.getElementById('mainContent').style.display = 'block';
+                    // Initialize folder toggles after content is loaded
+                    initializeFolderToggles();
+                    break;
+            }
+        });
+
         function toggleFolder(event) {
             const folder = event.target.closest('.folder');
             folder.classList.toggle('open');
@@ -45,12 +61,11 @@ export function getScripts(): string {
             });
         }
 
-        // Initialize event listeners
-        document.addEventListener('DOMContentLoaded', () => {
+        function initializeFolderToggles() {
             const folderToggles = document.querySelectorAll('.folder-toggle, .folder-name');
             folderToggles.forEach(toggle => {
                 toggle.addEventListener('click', toggleFolder);
             });
-        });
+        }
     `;
 }

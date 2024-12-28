@@ -5,8 +5,6 @@ import { getStyles } from './styles';
 import { getScripts } from './scripts';
 
 export function getWebviewContent(workspaceFolder: string): string {
-    const fileTree = createFileTreeHTML(workspaceFolder);
-    
     return `
         <!DOCTYPE html>
         <html>
@@ -15,19 +13,37 @@ export function getWebviewContent(workspaceFolder: string): string {
             </head>
             <body>
                 <h3>Select Files to Copy:</h3>
-                <div class="checkbox-container">
-                    <ul class="file-tree">
-                        ${fileTree}
-                    </ul>
+                <div id="loadingContainer" class="loading-container">
+                    <div class="loader"></div>
+                    <p>Loading file structure...</p>
                 </div>
-                <div class="button-container">
-                    <button onclick="copySelectedFiles()">Copy Content</button>
-                    <button onclick="copyFileStructure()">Copy Structure</button>
+                <div id="mainContent" style="display: none;">
+                    <div class="checkbox-container">
+                        <ul class="file-tree">
+                            <li>Loading...</li>
+                        </ul>
+                    </div>
+                    <div class="button-container">
+                        <button onclick="copySelectedFiles()">Copy Content</button>
+                        <button onclick="copyFileStructure()">Copy Selected Structure</button>
+                    </div>
                 </div>
                 <script>${getScripts()}</script>
             </body>
         </html>
     `;
+}
+
+// Function to generate file tree HTML asynchronously
+export async function generateFileTree(dirPath: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        try {
+            const fileTree = createFileTreeHTML(dirPath);
+            resolve(fileTree);
+        } catch (error) {
+            reject(error);
+        }
+    });
 }
 
 function createFileTreeHTML(dirPath: string, currentPath: string = ''): string {

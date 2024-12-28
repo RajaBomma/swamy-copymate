@@ -64,5 +64,27 @@ export function getStyles(): string {
         button:hover {
             background-color: #8e44ad;
         }
+
+        /* Loading Animation Styles */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #9b59b6;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     `;
 }
