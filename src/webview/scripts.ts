@@ -9,31 +9,49 @@ export function getScripts(): string {
             switch (message.type) {
                 case 'fileTree':
                     // Update the file tree content
-                    document.querySelector('.file-tree').innerHTML = message.content;
-                    // Hide loading spinner and show main content
-                    document.getElementById('loadingContainer').style.display = 'none';
-                    document.getElementById('mainContent').style.display = 'block';
-                    // Initialize folder toggles after content is loaded
-                    initializeFolderToggles();
+                    const fileTreeElement = document.querySelector('.file-tree');
+                    if (fileTreeElement) {
+                        fileTreeElement.innerHTML = message.content;
+                    }
+                    
+                    // Hide loading container and show main content
+                    const loadingContainer = document.getElementById('loadingContainer');
+                    const mainContent = document.getElementById('mainContent');
+                    
+                    if (loadingContainer && mainContent) {
+                        loadingContainer.style.display = 'none';
+                        mainContent.style.display = 'block';
+                        
+                        // Initialize folder toggles after content is loaded
+                        initializeFolderToggles();
+                    } else {
+                        console.error('Loading or main content containers not found');
+                    }
                     break;
             }
         });
 
         function toggleFolder(event) {
             const folder = event.target.closest('.folder');
-            folder.classList.toggle('open');
-            const folderContent = folder.nextElementSibling;
-            folderContent.style.display = folderContent.style.display === 'none' ? 'block' : 'none';
+            if (folder) {
+                folder.classList.toggle('open');
+                const folderContent = folder.nextElementSibling;
+                if (folderContent) {
+                    folderContent.style.display = folderContent.style.display === 'none' ? 'block' : 'none';
+                }
+            }
         }
 
         function toggleFolderCheckbox(event) {
             const checkbox = event.target;
-            const isChecked = checkbox.checked;
-            const folderList = checkbox.closest('.folder').nextElementSibling;
-            const childCheckboxes = folderList.querySelectorAll('input[type="checkbox"]');
-            childCheckboxes.forEach(childCheckbox => {
-                childCheckbox.checked = isChecked;
-            });
+            const folder = checkbox.closest('.folder');
+            if (folder) {
+                const folderList = folder.nextElementSibling;
+                const childCheckboxes = folderList.querySelectorAll('input[type="checkbox"]');
+                childCheckboxes.forEach(childCheckbox => {
+                    childCheckbox.checked = checkbox.checked;
+                });
+            }
         }
 
         function getSelectedFiles() {
@@ -47,6 +65,13 @@ export function getScripts(): string {
 
         function copySelectedFiles() {
             const selectedFiles = getSelectedFiles();
+            if (selectedFiles.length === 0) {
+                vscode.postMessage({
+                    type: 'error',
+                    message: 'Please select at least one file to copy.'
+                });
+                return;
+            }
             vscode.postMessage({ 
                 type: 'copy', 
                 selectedFiles: selectedFiles 
@@ -55,6 +80,13 @@ export function getScripts(): string {
 
         function copyFileStructure() {
             const selectedFiles = getSelectedFiles();
+            if (selectedFiles.length === 0) {
+                vscode.postMessage({
+                    type: 'error',
+                    message: 'Please select at least one file to copy structure.'
+                });
+                return;
+            }
             vscode.postMessage({ 
                 type: 'copyStructure', 
                 selectedFiles: selectedFiles 
@@ -67,5 +99,16 @@ export function getScripts(): string {
                 toggle.addEventListener('click', toggleFolder);
             });
         }
+
+        // Ensure the script runs after DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainContent = document.getElementById('mainContent');
+            const loadingContainer = document.getElementById('loadingContainer');
+            
+            if (mainContent && loadingContainer) {
+                mainContent.style.display = 'none';
+                loadingContainer.style.display = 'flex';
+            }
+        });
     `;
 }
