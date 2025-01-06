@@ -16,7 +16,6 @@ export function createWebviewPanel(workspaceFolder: string): vscode.WebviewPanel
             retainContextWhenHidden: true
         }
     );
-
     // Set initial HTML content
     panel.webview.html = getWebviewContent(workspaceFolder);
 

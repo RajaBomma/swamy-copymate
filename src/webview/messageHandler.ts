@@ -2,13 +2,17 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
+import isTextFile from './content';
 
 export function handleWebviewMessage(message: any, workspaceFolder: string) {
     switch (message.type) {
         case 'copy':
-            handleCopyContent(message.selectedFiles);
+            // For content copy, only include text files
+            const textFiles = message.selectedFiles.filter((file: string) => isTextFile(file));
+            handleCopyContent(textFiles);
             break;
         case 'copyStructure':
+            // For structure copy, include all selected files
             handleCopyStructure(message.selectedFiles, workspaceFolder);
             break;
     }

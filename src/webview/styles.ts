@@ -371,5 +371,49 @@ export function getStyles(): string {
                 justify-content: center;
             }
         }
+            .file.raw-file {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .file.raw-file label {
+            cursor: not-allowed;
+            color: #999;
+        }
+
+        .raw-file-icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.7;
+        }
+
+        /* Optional: Add hover effect to show it's not selectable */
+        .file.raw-file:hover {
+            background-color: transparent;
+        }
+
+        /* Optional: Add tooltip style */
+        .file.raw-file::after {
+            content: "Binary file - cannot be copied";
+            position: absolute;
+            background: #433D8B;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            right: 100%;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        .file.raw-file:hover::after {
+            opacity: 1;
+        }
     `;
 }

@@ -2,7 +2,20 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { getStyles } from './styles';
 import { getScripts } from './scripts';
-
+ export default function isTextFile(filePath: string): boolean {
+    const textExtensions = [
+        '.txt', '.js', '.jsx', '.ts', '.tsx', '.md', '.json', '.css', '.scss',
+        '.html', '.htm', '.xml', '.yaml', '.yml', '.ini', '.conf', '.sh',
+        '.bash', '.py', '.java', '.rb', '.php', '.c', '.cpp', '.h', '.hpp',
+        '.cs', '.go', '.rs', '.swift', '.kt', '.kts', '.dart', '.vue',
+        '.graphql', '.sql', '.env', '.toml', '.properties', '.gradle',
+        '.gitignore', '.dockerignore', '.editorconfig', '.eslintrc',
+        '.prettierrc', '.babelrc'
+    ];
+    
+    const ext = path.extname(filePath).toLowerCase();
+    return textExtensions.includes(ext);
+}
 export function getWebviewContent(workspaceFolder: string): string {
     return `
         <!DOCTYPE html>
@@ -52,7 +65,6 @@ export async function generateFileTree(dirPath: string): Promise<string> {
     }
 }
 
-// Updated createFileTreeHTML function
 async function createFileTreeHTML(dirPath: string, currentPath: string = ''): Promise<string> {
     try {
         let html = '';
@@ -75,7 +87,7 @@ async function createFileTreeHTML(dirPath: string, currentPath: string = ''): Pr
                     html += `
                         <li>
                             <div class="folder">
-                                <input type="checkbox" onclick="toggleFolderCheckbox(event)">
+                                <input type="checkbox" onclick="toggleFolderCheckbox(event)" data-path="${fullPath}">
                                 <span class="folder-toggle"></span>
                                 <span class="folder-name">${file}</span>
                             </div>
@@ -87,9 +99,15 @@ async function createFileTreeHTML(dirPath: string, currentPath: string = ''): Pr
                 } else {
                     // Skip hidden files
                     if (!file.startsWith('.')) {
+                        const isText = isTextFile(fullPath);
                         html += `
-                            <li class="file">
-                                <input type="checkbox" id="${fullPath}" value="${fullPath}">
+                            <li class="file ${isText ? 'text-file' : 'raw-file'}">
+                                <input type="checkbox" 
+                                    id="${fullPath}" 
+                                    value="${fullPath}"
+                                    data-type="${isText ? 'text' : 'binary'}"
+                                    ${isText ? '' : 'data-structure-only="true"'}
+                                    class="file-checkbox">
                                 <label for="${fullPath}">${file}</label>
                             </li>
                         `;
