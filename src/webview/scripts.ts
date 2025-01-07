@@ -3,6 +3,24 @@ export function getScripts(): string {
     return `
         const vscode = acquireVsCodeApi();
         
+        // Store checkbox states
+        let checkboxStates = new Map();
+
+        // Save checkbox states
+        function saveCheckboxState(checkbox) {
+            checkboxStates.set(checkbox.value, checkbox.checked);
+        }
+
+        // Restore checkbox states
+        function restoreCheckboxStates() {
+            checkboxStates.forEach((checked, value) => {
+                const checkbox = document.querySelector(\`input[value="\${value}"]\`);
+                if (checkbox) {
+                    checkbox.checked = checked;
+                }
+            });
+        }
+        
         // Handle messages from the extension
         window.addEventListener('message', event => {
             const message = event.data;
@@ -108,6 +126,13 @@ export function getScripts(): string {
 
         // Handle copying selected file contents
         function copySelectedFiles() {
+            const copyBtn = document.getElementById('copyContentBtn');
+            const originalText = copyBtn.textContent;
+            
+            // Save current checkbox states
+            const checkboxes = document.querySelectorAll('.file input[type="checkbox"]');
+            checkboxes.forEach(saveCheckboxState);
+            
             const selectedFiles = getSelectedFiles();
             const textFiles = selectedFiles.filter(file => {
                 const checkbox = document.querySelector(\`input[value="\${file}"]\`);
@@ -122,14 +147,35 @@ export function getScripts(): string {
                 return;
             }
             
+            // Show loading state
+            copyBtn.disabled = true;
+            copyBtn.innerHTML = '<span class="loading-spinner"></span> Copying...';
+            
             vscode.postMessage({ 
                 type: 'copy', 
                 selectedFiles: textFiles 
+            });
+            
+            // Listen for copy success message
+            window.addEventListener('message', function copyHandler(event) {
+                if (event.data.type === 'copySuccess') {
+                    copyBtn.innerHTML = '✓ Copied!';
+                    setTimeout(() => {
+                        copyBtn.disabled = false;
+                        copyBtn.textContent = originalText;
+                        // Restore checkbox states
+                        restoreCheckboxStates();
+                    }, 2000);
+                    window.removeEventListener('message', copyHandler);
+                }
             });
         }
 
         // Handle copying file structure
         function copyFileStructure() {
+            const structureBtn = document.getElementById('structureBtn');
+            const originalText = structureBtn.textContent;
+
             const selectedFiles = getSelectedFiles();
             if (selectedFiles.length === 0) {
                 vscode.postMessage({
@@ -138,9 +184,26 @@ export function getScripts(): string {
                 });
                 return;
             }
+
+            // Show loading state
+            structureBtn.disabled = true;
+            structureBtn.innerHTML = '<span class="loading-spinner"></span> Copying...';
+
             vscode.postMessage({ 
                 type: 'copyStructure', 
                 selectedFiles: selectedFiles 
+            });
+
+            // Listen for copy success message
+            window.addEventListener('message', function copyHandler(event) {
+                if (event.data.type === 'copySuccess') {
+                    structureBtn.innerHTML = '✓ Copied!';
+                    setTimeout(() => {
+                        structureBtn.disabled = false;
+                        structureBtn.textContent = originalText;
+                    }, 2000);
+                    window.removeEventListener('message', copyHandler);
+                }
             });
         }
 
@@ -211,6 +274,11 @@ export function getScripts(): string {
 
             // Initialize keyboard navigation
             handleKeyboardNavigation();
+
+            // Add Buy Me a Coffee button
+            document.querySelector('.button-container').insertAdjacentHTML('beforeend', \`
+                <a href="https://www.buymeacoffee.com/swamy3697"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=swamy3697&button_colour=5F7FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00" /></a>
+            \`);
         });
     `;
 }

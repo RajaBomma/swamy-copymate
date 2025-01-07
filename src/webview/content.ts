@@ -39,8 +39,8 @@ export function getWebviewContent(workspaceFolder: string): string {
                         </ul>
                     </div>
                     <div class="button-container">
-                        <button onclick="copySelectedFiles()">Copy Content</button>
-                        <button onclick="copyFileStructure()">Copy Selected Structure</button>
+                    <button id="copyContentBtn" onclick="copySelectedFiles()">Copy Content</button>
+                    <button id="structureBtn" onclick="copyFileStructure()">Copy Selected Structure</button>
                     </div>
                 </div>
                 <script>${getScripts()}</script>

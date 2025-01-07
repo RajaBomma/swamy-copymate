@@ -4,21 +4,21 @@ import * as fs from 'fs';
 import * as path from 'path';
 import isTextFile from './content';
 
-export function handleWebviewMessage(message: any, workspaceFolder: string) {
+export function handleWebviewMessage(message: any, workspaceFolder: string,panel:any) {
     switch (message.type) {
         case 'copy':
             // For content copy, only include text files
             const textFiles = message.selectedFiles.filter((file: string) => isTextFile(file));
-            handleCopyContent(textFiles);
+            handleCopyContent(textFiles,panel);
             break;
         case 'copyStructure':
             // For structure copy, include all selected files
-            handleCopyStructure(message.selectedFiles, workspaceFolder);
+            handleCopyStructure(message.selectedFiles, workspaceFolder,panel);
             break;
     }
 }
 
-function handleCopyContent(selectedFiles: string[]) {
+function handleCopyContent(selectedFiles: string[],panel:any) {
     let contentToCopy = '';
     selectedFiles.forEach((filePath: string) => {
         try {
@@ -29,17 +29,17 @@ function handleCopyContent(selectedFiles: string[]) {
         }
     });
 
-    copyToClipboard(contentToCopy, 'File content copied to clipboard!');
+    copyToClipboard(contentToCopy, 'File content copied to clipboard!',panel);
 }
 
-function handleCopyStructure(selectedFiles: string[], workspaceFolder: string) {
+function handleCopyStructure(selectedFiles: string[], workspaceFolder: string,panel:any) {
     // Sort files to maintain directory hierarchy
     selectedFiles.sort();
     
     // Convert absolute paths to relative and create tree structure
     const structure = createTreeStructure(selectedFiles, workspaceFolder);
     
-    copyToClipboard(structure, 'File structure copied to clipboard!');
+    copyToClipboard(structure, 'File structure copied to clipboard!',panel);
 }
 
 function createTreeStructure(files: string[], rootPath: string): string {
@@ -83,9 +83,13 @@ function createTreeStructure(files: string[], rootPath: string): string {
     return renderTree(tree);
 }
 
-function copyToClipboard(content: string, successMessage: string) {
+function copyToClipboard(content: string, successMessage: string,panel:any) {
     vscode.env.clipboard.writeText(content).then(
-        () => vscode.window.showInformationMessage(successMessage),
+        () => {
+            vscode.window.showInformationMessage(successMessage);
+            // Send success message back to webview
+            panel.webview.postMessage({ type: 'copySuccess' });
+        },
         () => vscode.window.showErrorMessage('Failed to copy to clipboard.')
     );
 }

@@ -48,7 +48,7 @@ export function createWebviewPanel(workspaceFolder: string): vscode.WebviewPanel
     // Handle messages from the webview
     panel.webview.onDidReceiveMessage(message => {
         console.log('Received message from webview:', message);
-        handleWebviewMessage(message, workspaceFolder);
+        handleWebviewMessage(message, workspaceFolder,panel);
     });
 
     panel.onDidDispose(() => {
