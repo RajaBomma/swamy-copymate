@@ -18,6 +18,7 @@ export function handleWebviewMessage(message: any, workspaceFolder: string, pane
     }
 }
 // added by gopi
+// added by raja
 
 function handleCopyContent(selectedFiles: string[], panel: any) {
     let contentToCopy = '';
