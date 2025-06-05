@@ -19,6 +19,7 @@ export function handleWebviewMessage(message: any, workspaceFolder: string, pane
 }
 // added by gopi
 // added by raja
+// Function to check if a file is a text file
 
 function handleCopyContent(selectedFiles: string[], panel: any) {
     let contentToCopy = '';
