@@ -12,7 +12,7 @@ import { getScripts } from './scripts';
         '.gitignore', '.dockerignore', '.editorconfig', '.eslintrc',
         '.prettierrc', '.babelrc'
     ];
-    
+    //raja 21
     const ext = path.extname(filePath).toLowerCase();
     return textExtensions.includes(ext);
 }
